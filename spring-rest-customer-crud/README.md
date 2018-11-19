@@ -1,6 +1,8 @@
 This is a very simple example of how to create a REST api using spring and saving / getting 
 information from a relational database, in this case HSQLDB was utilized.
 
+![](https://i.imgur.com/FzMPETd.png)
+
 ### Running the app
 
 ```
