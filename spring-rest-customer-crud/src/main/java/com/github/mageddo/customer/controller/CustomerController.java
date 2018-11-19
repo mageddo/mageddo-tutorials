@@ -3,6 +3,7 @@ package com.github.mageddo.customer.controller;
 import com.github.mageddo.customer.entity.CustomerEntity;
 import com.github.mageddo.customer.exception.ValidationException;
 import com.github.mageddo.customer.service.CustomerService;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
 import java.util.Map;
 
 @RestController
@@ -24,8 +26,19 @@ public class CustomerController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity create(@RequestBody CustomerEntity customerEntity) {
-		customerService.create(customerEntity);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		try {
+			final Long createdCustomerId = customerService.create(customerEntity).getId();
+			return ResponseEntity
+					.status(HttpStatus.CREATED)
+					.body(Map.of("id", createdCustomerId));
+		} catch (Exception e){
+			if(!ExceptionUtils.getRootCauseMessage(e).contains("UK_")){
+				throw e;
+			}
+			return ResponseEntity
+					.status(HttpStatus.BAD_REQUEST)
+					.body(Map.of("msg", "Username already exists"));
+		}
 	}
 
 	@RequestMapping(value = "{customerId}", method = RequestMethod.PUT)
@@ -63,12 +76,5 @@ public class CustomerController {
 		return ResponseEntity.badRequest().body(Map.of("msg", e.getMessage()));
 	}
 
-	@ExceptionHandler(Throwable.class)
-	@ResponseBody
-	public ResponseEntity serverErrorHandler(Throwable e){
-		logger.error("status=internal-error, msg={}", e.getMessage(), e);
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-				.body(Map.of("msg", "Temporary unavailable, sorry for the inconvenience"));
-	}
 
 }

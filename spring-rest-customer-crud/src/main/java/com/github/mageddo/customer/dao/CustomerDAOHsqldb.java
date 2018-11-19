@@ -14,8 +14,8 @@ public class CustomerDAOHsqldb implements CustomerDAO {
 	private EntityManager entityManager;
 
 	@Override
-	public void merge(CustomerEntity customerEntity) {
-		entityManager.merge(customerEntity);
+	public CustomerEntity merge(CustomerEntity customerEntity) {
+		return entityManager.merge(customerEntity);
 	}
 
 	@Override
@@ -36,5 +36,13 @@ public class CustomerDAOHsqldb implements CustomerDAO {
 				.createQuery("DELETE FROM CustomerEntity WHERE id = :customerId")
 				.setParameter("customerId", customerId)
 				.executeUpdate();
+	}
+
+	@Override
+	public CustomerEntity find(String name) {
+		return (CustomerEntity) entityManager
+				.createQuery("FROM CustomerEntity WHERE name = :name")
+				.setParameter("name", name)
+				.getSingleResult();
 	}
 }

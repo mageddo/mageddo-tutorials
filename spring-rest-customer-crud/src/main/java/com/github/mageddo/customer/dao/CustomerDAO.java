@@ -6,11 +6,13 @@ import java.util.List;
 
 public interface CustomerDAO {
 
-	void merge(CustomerEntity customerEntity);
+	CustomerEntity merge(CustomerEntity customerEntity);
 
 	CustomerEntity find(Long customerId);
 
 	List<CustomerEntity> findAll();
 
 	void delete(Long customerId);
+
+	CustomerEntity find(String name);
 }

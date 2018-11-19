@@ -23,7 +23,7 @@ public class CustomerEntity {
 		this.id = id;
 	}
 
-	@Column(name = "NAM_CUSTOMER", length = 255, nullable = false)
+	@Column(name = "NAM_CUSTOMER", length = 255, nullable = false, unique = true)
 	public String getName() {
 		return name;
 	}

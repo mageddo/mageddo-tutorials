@@ -16,8 +16,8 @@ public class CustomerService {
 	private CustomerDAO customerDAO;
 
 	@Transactional
-	public void create(CustomerEntity customerEntity) {
-		customerDAO.merge(customerEntity);
+	public CustomerEntity create(CustomerEntity customerEntity) {
+		return customerDAO.merge(customerEntity);
 	}
 
 	@Transactional
@@ -48,5 +48,10 @@ public class CustomerService {
 		if(!exists(customerId)){
 			throw new CustomerNotFoundException("Customer not found: " + customerId);
 		}
+	}
+
+	@Transactional
+	public CustomerEntity find(String name) {
+		return customerDAO.find(name);
 	}
 }
