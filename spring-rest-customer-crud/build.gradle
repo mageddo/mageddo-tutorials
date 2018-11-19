@@ -1,10 +1,16 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 repositories {
     mavenCentral()
 }
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+mainClassName = 'com.github.mageddo.customer.App'
 
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.0.RELEASE'
